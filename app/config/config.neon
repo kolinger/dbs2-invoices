@@ -1,0 +1,43 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+
+
+php:
+	date.timezone: Europe/Prague
+	# zlib.output_compression: yes
+
+
+nette:
+	application:
+		mapping:
+			*: App\*Module\Presenters\*Presenter
+
+	session:
+		expiration: 14 days
+
+
+services:
+	- App\RouterFactory
+	router: @App\RouterFactory::createRouter
+
+	- App\PasswordEncoder
+	- App\Model\CompaniesFacade
+	- App\Model\PermissionsFacade
+	- App\Model\ClientsFacade
+	- App\Model\ProductsFacade
+	- App\Model\InvoicesFacade
+	- App\Model\PaymentsFacade
+
+	managersFacade:
+		class: App\Model\ManagersFacade
+		inject: true
+
+	authenticator:
+		class: App\Model\Authenticator
+		inject: true
+

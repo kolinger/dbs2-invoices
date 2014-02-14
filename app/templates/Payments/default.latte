@@ -1,0 +1,35 @@
+{block title}Platby{/block}
+{block content}
+	<p>
+		<a n:href="create" class="btn btn-default">Přidat novou platbu</a>
+	</p>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Společnost</th>
+				<th>Variabilní symbol</th>
+				<th>Zákazník</th>
+				<th>Částka</th>
+				<th>Datum</th>
+				<th>Akce</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr n:foreach="$payments as $payment">
+				<td>{$payment->company_name}</td>
+				<td>{$payment->invoice_id}</td>
+				<td>{$payment->client_name}</td>
+				<td>{$payment->amount}</td>
+				<td>{$payment->date|date:'j.n.Y'}</td>
+				<td>
+					<a n:href="edit, $payment->id" class="btn-primary btn-sm">Upravit</a>
+					<a n:href="delete, $payment->id" class="btn btn-danger btn-sm"
+					   data-confirm="Opravdu chcete smazat platbu {$payment->amount} s variabilním symbolem {$payment->invoice_id} společnosti {$payment->company_name}?">Smazat</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	{control paginator}
+{/block}

@@ -1,0 +1,18 @@
+<nav class="navbar navbar-default" role="navigation">
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+		<ul class="nav navbar-nav">
+			{if $user->loggedIn}
+				<li{ifCurrent Companies:*} class="active"{/ifCurrent}><a n:href="Companies:">Společnosti</a></li>
+				<li{ifCurrent Permissions:*} class="active"{/ifCurrent}><a n:href="Permissions:">Oprávnění</a></li>
+				<li{ifCurrent Clients:*} class="active"{/ifCurrent}><a n:href="Clients:">Zákazníci</a></li>
+				<li{ifCurrent Invoices:*} class="active"{/ifCurrent}><a n:href="Invoices:">Faktury</a></li>
+				<li{ifCurrent Products:*} class="active"{/ifCurrent}><a n:href="Products:">Produkty</a></li>
+				<li{ifCurrent Payments:*} class="active"{/ifCurrent}><a n:href="Payments:">Platby</a></li>
+			{else}
+				<li{ifCurrent Homepage:*} class="active"{/ifCurrent}><a n:href="Homepage:">Úvodní stránka</a></li>
+				<li{ifCurrent Registration:*} class="active"{/ifCurrent}><a n:href="Registration:">Registrace</a></li>
+				<li{ifCurrent Login:*} class="active"{/ifCurrent}><a n:href="Login:">Přihlášení</a></li>
+			{/if}
+		</ul>
+	</div>
+</nav>

@@ -1,0 +1,2 @@
+TODO: GPL
+TODO: used frameworks and tools (nette, bootstrap, html5-reset)

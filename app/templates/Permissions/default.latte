@@ -1,0 +1,41 @@
+{block title}Oprávnění{/block}
+{block content}
+	<p>
+		<a n:href="create" class="btn btn-default">Přidělení oprávnění</a>
+	</p>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Společnost</th>
+				<th>Uživatel</th>
+				<th>Úprava společnosti</th>
+				<th>Oprávnění</th>
+				<th>Klienti</th>
+				<th>Faktury</th>
+				<th>Produkty</th>
+				<th>Platby</th>
+				<th>Akce</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr n:foreach="$permissions as $permission">
+				<td>{$permission->company_name}</td>
+				<td>{$permission->manager_name}</td>
+				<td>{if $permission->role_company}Ano{else}Ne{/if}</td>
+				<td>{if $permission->role_permissions}Ano{else}Ne{/if}</td>
+				<td>{if $permission->role_clients}Ano{else}Ne{/if}</td>
+				<td>{if $permission->role_invoices}Ano{else}Ne{/if}</td>
+				<td>{if $permission->role_products}Ano{else}Ne{/if}</td>
+				<td>{if $permission->role_payments}Ano{else}Ne{/if}</td>
+				<td>
+					<a n:href="edit, $permission->company_id, $permission->manager_id"
+					   class="btn-primary btn-sm">Upravit</a>
+					<a n:href="delete, company => $permission->company_id, manager => $permission->manager_id"
+					   class="btn btn-danger btn-sm"
+					   data-confirm="Opravdu chcete smazat oprávnění společnosti {$permission->company_name} pro uživatele {$permission->manager_name}?">Smazat</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	{control paginator}
+{/block}

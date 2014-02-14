@@ -1,0 +1,28 @@
+{block title}Společnosti{/block}
+{block content}
+	<p>
+		<a n:href="create" class="btn btn-default">Vytvořit novou společnost</a>
+	</p>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Název</th>
+				<th>Akce</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr n:foreach="$companies as $company">
+				<td>{$company->name}</td>
+				<td>
+					<a n:href="switch, $company->id" class="btn-primary btn-sm">Přepnout</a>
+					<a n:href="edit, $company->id" class="btn-primary btn-sm">Upravit</a>
+					<a n:href="delete, $company->id" class="btn btn-danger btn-sm"
+					   data-confirm="Opravdu chcete smazat společnost {$company->name}?">Smazat</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	{control paginator}
+{/block}

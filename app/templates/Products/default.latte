@@ -1,0 +1,35 @@
+{block title}Produkty{/block}
+{block content}
+	<p>
+		<a n:href="create" class="btn btn-default">Přidat nový produkt</a>
+	</p>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Společnost</th>
+				<th>Název</th>
+				<th>Počet</th>
+				<th>Cena</th>
+				<th>DPH</th>
+				<th>Akce</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr n:foreach="$products as $product">
+				<td>{$product->company_name}</td>
+				<td>{$product->name}</td>
+				<td>{if $product->count == NULL}neuvedeno{else}{$product->count}x{/if}</td>
+				<td>{if $product->price == NULL}neuvedeno{else}{$product->price}{/if}</td>
+				<td>{if $product->tax == NULL}neuvedeno{else}{$product->tax}%{/if}</td>
+				<td>
+					<a n:href="edit, $product->id" class="btn-primary btn-sm">Upravit</a>
+					<a n:href="delete, $product->id" class="btn btn-danger btn-sm"
+					   data-confirm="Opravdu chcete smazat produkt {$product->name} společnosti {$product->company_name}?">Smazat</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	{control paginator}
+{/block}

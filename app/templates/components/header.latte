@@ -1,0 +1,16 @@
+<div class="clearfix">
+	<div class="pull-left">
+		<h1>SIS <small>simple invoices system</small></h1>
+	</div>
+	<div class="pull-right user-panel">
+		{if $user->loggedIn}
+			<p>
+				Přihlášen {$user->identity->name} |
+				<a n:href="Settings:">Nastavení</a> |
+				<a n:href="Logout:">Odhlásit se</a>
+			</p>
+		{else}
+			<p><a n:href="Registration:">Registrace</a> | <a n:href="Login:">Přihlášení</a></p>
+		{/if}
+	</div>
+</div>

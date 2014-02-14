@@ -1,0 +1,38 @@
+{block title}Faktury{/block}
+{block content}
+	<p>
+		<a n:href="create" class="btn btn-default">Vytvořit novou fakturu</a>
+	</p>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Společnost</th>
+				<th>ID</th>
+				<th>Zákazník</th>
+				<th>Částka</th>
+				<th>Datum vytvoření</th>
+				<th>Datum splatnosti</th>
+				<th>Akce</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr n:foreach="$invoices as $invoice">
+				<td>{$invoice->company_name}</td>
+				<td>{$invoice->id}</td>
+				<td>{$invoice->client_name}</td>
+				<td>{$invoice->amount}</td>
+				<td>{$invoice->create_date|date:'j.n.Y'}</td>
+				<td>{$invoice->end_date|date:'j.n.Y'}</td>
+				<td>
+					<a n:href="preview, $invoice->id" class="btn-primary btn-sm">Zobrazit</a>
+					<a n:href="edit, $invoice->id" class="btn-primary btn-sm">Upravit</a>
+					<a n:href="delete, $invoice->id" class="btn btn-danger btn-sm"
+					   data-confirm="Opravdu chcete smazat fakturu {$invoice->id} společnosti {$invoice->company_name}?">Smazat</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	{control paginator}
+{/block}

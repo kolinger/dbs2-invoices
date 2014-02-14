@@ -1,0 +1,128 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "00bdd5f00b4bac40756b4e95b36c2162",
+    "packages": [
+        {
+            "name": "kolinger/square-forms",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kolinger/square-forms.git",
+                "reference": "d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kolinger/square-forms/zipball/d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46",
+                "reference": "d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46",
+                "shasum": ""
+            },
+            "require": {
+                "nette/nette": "2.1.*",
+                "php": ">= 5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Square\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "WTFPL"
+            ],
+            "authors": [
+                {
+                    "name": "Tomáš Kolinger",
+                    "email": "tomas@kolinger.name",
+                    "homepage": "http://tomas.kolinger.name"
+                }
+            ],
+            "time": "2014-01-19 18:02:22"
+        },
+        {
+            "name": "nette/nette",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/nette.git",
+                "reference": "9e7e5fc5921053172dbacecda2c06d749f89a71b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/nette/zipball/9e7e5fc5921053172dbacecda2c06d749f89a71b",
+                "reference": "9e7e5fc5921053172dbacecda2c06d749f89a71b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "ext-tokenizer": "*",
+                "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "nette/tester": "~1.0.0"
+            },
+            "suggest": {
+                "ext-fileinfo": "*",
+                "ext-gd": "*",
+                "ext-mbstring": "*",
+                "ext-pdo": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Nette/"
+                ],
+                "files": [
+                    "Nette/common/shortcuts.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "http://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "http://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Framework - innovative framework for fast and easy development of secured web applications in PHP. Write less, have cleaner code and your work will bring you joy.",
+            "homepage": "http://nette.org",
+            "keywords": [
+                "Forms",
+                "database",
+                "debugging",
+                "framework",
+                "mailing",
+                "mvc",
+                "templating"
+            ],
+            "time": "2014-02-11 04:51:20"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "kolinger/square-forms": 20
+    },
+    "platform": {
+        "php": ">= 5.3.7"
+    },
+    "platform-dev": [
+
+    ]
+}
