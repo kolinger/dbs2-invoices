@@ -1,0 +1,11 @@
+parameters:
+
+
+nette:
+	database:
+		dsn: 'pgsql:host=localhost;port=5432;dbname=invoices'
+		user: user
+		password: pass
+		options:
+			lazy: yes
+		reflection: conventional
