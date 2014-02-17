@@ -57,14 +57,7 @@ class PaymentsPresenter extends ProtectedPresenter
 	{
 		$form = new BootstrapForm;
 
-		$companyId = $this->getParameter('company');
 		$id = $this->getParameter('id');
-		if (!$companyId && !$id) {
-			$items = $this->permissionsFacade->findAvailableCompaniesInPairs($this->user->id);
-			$form->addSelect('companyId', 'Společnost', $items)
-				->setRequired('Musíte vybrat společnost');
-		}
-
 		if (!$id) {
 			$form->addText('invoiceId', 'Variabilní symbol/číslo faktury')
 				->setRequired('Musíte vyplnit variabilní symbol');

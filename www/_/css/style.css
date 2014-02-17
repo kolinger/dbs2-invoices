@@ -6,3 +6,7 @@
 .table > tbody > tr > td, .table > tfoot > tr > td {
 	vertical-align: middle;
 }
+
+.company-select {
+	line-height: 45px;
+}

@@ -17,6 +17,10 @@
 				$('[data-dependent-select-loader]').hide();
 			});
 		});
+
+		$(document).on('change', '[data-company-select]', function () {
+			$(this).closest('form').submit();
+		});
 	
 	});
 })(window.jQuery);

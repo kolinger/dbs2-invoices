@@ -98,6 +98,12 @@ class PaymentsFacade extends Facade
 	{
 		$query = $this->context->table('v_payments');
 		$query->where('manager_id', $userId);
+
+		$company = $this->getSelectedCompany();
+		if ($company) {
+			$query->where('company_id', $company);
+		}
+
 		return $query;
 	}
 }

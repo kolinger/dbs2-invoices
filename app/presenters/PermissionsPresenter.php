@@ -51,6 +51,9 @@ class PermissionsPresenter extends ProtectedPresenter
 	{
 		$companyId = $this->getParameter('company');
 		$managerId = $this->getParameter('manager');
+		if (!$companyId) {
+			$companyId = $this->getSelectedCompany();
+		}
 
 		$form = new BootstrapForm;
 

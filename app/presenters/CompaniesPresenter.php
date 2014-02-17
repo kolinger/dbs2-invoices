@@ -158,4 +158,18 @@ class CompaniesPresenter extends ProtectedPresenter
 		$this->flashMessage('Společnost byla úspěšně smazána.', 'success');
 		$this->redirect('default');
 	}
+
+
+	/************************ switch ************************/
+
+
+	/**
+	 * @param int $id
+	 */
+	public function actionSwitch($id)
+	{
+		$settings = $this->session->getSection('settings');
+		$settings->company = $id;
+		$this->redirect('default');
+	}
 }

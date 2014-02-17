@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use Nette\Database\Context;
-use Nette\Database\Table\Selection;
+use Nette\Http\Session;
 use Nette\Object;
 
 /**
@@ -19,13 +19,20 @@ abstract class Facade extends Object
 	 */
 	private $context;
 
+	/**
+	 * @var Session
+	 */
+	private $session;
+
 
 	/**
 	 * @param Context $context
+	 * @param Session $session
 	 */
-	public function __construct(Context $context)
+	public function __construct(Context $context, Session $session)
 	{
 		$this->context = $context;
+		$this->session = $session;
 	}
 
 
@@ -35,5 +42,15 @@ abstract class Facade extends Object
 	public function getContext()
 	{
 		return $this->context;
+	}
+
+
+	/**
+	 * @return int|NULL
+	 */
+	public function getSelectedCompany()
+	{
+		$settings = $this->session->getSection('settings');
+		return $settings && isset($settings->company) ? $settings->company : NULL;
 	}
 }

@@ -23,6 +23,26 @@ class CompaniesFacade extends Facade
 
 
 	/**
+	 * @param int $userId
+	 * @return array
+	 */
+	public function findMine($userId)
+	{
+		return $this->createSelection($userId)->fetchAll();
+	}
+
+
+	/**
+	 * @param int $userId
+	 * @return array
+	 */
+	public function findMineInPairs($userId)
+	{
+		return $this->createSelection($userId)->fetchPairs('id', 'name');
+	}
+
+
+	/**
 	 * @param int $offset
 	 * @param int $limit
 	 * @param int $userId
@@ -81,12 +101,12 @@ class CompaniesFacade extends Facade
 		$values = array(
 			'company_id' => $company->id,
 			'manager_id' => $userId,
-			'role_company' => true,
-			'role_permissions' => true,
-			'role_clients' => true,
-			'role_invoices' => true,
-			'role_products' => true,
-			'role_payments' => true,
+			'role_company' => TRUE,
+			'role_permissions' => TRUE,
+			'role_clients' => TRUE,
+			'role_invoices' => TRUE,
+			'role_products' => TRUE,
+			'role_payments' => TRUE,
 		);
 		$this->context->query('INSERT INTO permissions', $values);
 	}

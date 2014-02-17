@@ -141,6 +141,12 @@ class PermissionsFacade extends Facade
 	{
 		$query = $this->context->table('v_permissions');
 		$query->where('owner_id', $ownerId);
+
+		$company = $this->getSelectedCompany();
+		if ($company) {
+			$query->where('company_id', $company);
+		}
+
 		return $query;
 	}
 }

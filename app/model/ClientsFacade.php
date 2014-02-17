@@ -139,6 +139,12 @@ class ClientsFacade extends Facade
 	{
 		$query = $this->context->table('v_clients');
 		$query->where('manager_id', $userId);
+
+		$company = $this->getSelectedCompany();
+		if ($company) {
+			$query->where('company_id', $company);
+		}
+
 		return $query;
 	}
 }

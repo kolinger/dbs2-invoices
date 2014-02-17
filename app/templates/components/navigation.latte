@@ -14,5 +14,12 @@
 				<li{ifCurrent Login:*} class="active"{/ifCurrent}><a n:href="Login:">Přihlášení</a></li>
 			{/if}
 		</ul>
+		<div class="company-select pull-right" n:if="$user->loggedIn">
+			{form companyForm}
+				{label company /}
+				{input company, data-company-select => 'true'}
+				{input send, style => 'display:none'}
+			{/form}
+		</div>
 	</div>
 </nav>

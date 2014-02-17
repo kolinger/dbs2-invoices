@@ -59,6 +59,10 @@ class InvoicesPresenter extends ProtectedPresenter
 		$form = new BootstrapForm;
 
 		$companyId = $this->getParameter('company');
+		if (!$companyId) {
+			$companyId = $this->getSelectedCompany();
+		}
+
 		$id = $this->getParameter('id');
 		if (!$companyId && !$id) {
 			$items = $this->permissionsFacade->findAvailableCompaniesInPairs($this->user->id);
