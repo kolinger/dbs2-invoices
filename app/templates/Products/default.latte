@@ -7,7 +7,7 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>Společnost</th>
+				<th n:if="!$presenter->getSelectedCompany()">Společnost</th>
 				<th>Název</th>
 				<th>Počet</th>
 				<th>Cena</th>
@@ -17,7 +17,7 @@
 		</thead>
 		<tbody>
 			<tr n:foreach="$products as $product">
-				<td>{$product->company_name}</td>
+				<td n:if="!$presenter->getSelectedCompany()">{$product->company_name}</td>
 				<td>{$product->name}</td>
 				<td>{if $product->count == NULL}neuvedeno{else}{$product->count}x{/if}</td>
 				<td>{if $product->price == NULL}neuvedeno{else}{$product->price}{/if}</td>

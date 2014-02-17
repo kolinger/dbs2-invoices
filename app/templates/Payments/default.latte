@@ -7,7 +7,7 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>Společnost</th>
+				<th n:if="!$presenter->getSelectedCompany()">Společnost</th>
 				<th>Variabilní symbol</th>
 				<th>Zákazník</th>
 				<th>Částka</th>
@@ -17,7 +17,7 @@
 		</thead>
 		<tbody>
 			<tr n:foreach="$payments as $payment">
-				<td>{$payment->company_name}</td>
+				<td n:if="!$presenter->getSelectedCompany()">{$payment->company_name}</td>
 				<td>{$payment->invoice_id}</td>
 				<td>{$payment->client_name}</td>
 				<td>{$payment->amount}</td>
