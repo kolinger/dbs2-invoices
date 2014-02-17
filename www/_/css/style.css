@@ -29,3 +29,70 @@
 .products .btn {
 	margin-left: 10px;
 }
+
+/************************ invoice print ************************/
+
+.invoice {
+	width: 740px;
+	margin: 10px;
+	font-family: sans-serif;
+}
+
+.invoice table,
+.invoice tbody,
+.invoice thead,
+.invoice tfoot {
+	text-align: left;
+	border-spacing: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.invoice th {
+	width: 140px;
+	white-space: nowrap;
+}
+
+.invoice th,
+.invoice td {
+	padding: 5px;
+}
+
+.invoice .left {
+	width: 350px;
+	float: left;
+}
+
+.invoice .left table {
+	width: 350px;
+	float: left;
+	padding-left: 10px;
+}
+
+.invoice .products {
+	width: 702px;
+}
+
+.invoice .products tfoot tr:first-of-type td {
+	border-top: 1px solid #000;
+	padding-top: 15px;
+}
+
+.invoice .products tr td:first-of-type,
+.invoice .products tr th:first-of-type {
+	padding-left: 10px;
+}
+
+.invoice .products tr td:last-of-type,
+.invoice .products tr th:last-of-type {
+	padding-right: 10px;
+}
+
+.invoice .padding-bottom {
+	padding-bottom: 20px;
+}
+
+.invoice .head {
+	border-bottom: 1px solid #000;
+	float: left;
+}

@@ -6,7 +6,6 @@ use App\BootstrapForm;
 use App\VisualPaginator;
 use Nette\Application\BadRequestException;
 use Nette\Application\UI\Form;
-use Nette\Diagnostics\FireLogger;
 use Nette\Forms\Controls\BaseControl;
 
 
@@ -210,7 +209,7 @@ class InvoicesPresenter extends ProtectedPresenter
 
 	/**
 	 * @param int $id
-	 * @throws \Nette\Application\BadRequestException
+	 * @throws BadRequestException
 	 */
 	public function renderEdit($id)
 	{
@@ -273,5 +272,25 @@ class InvoicesPresenter extends ProtectedPresenter
 		$this->invoicesFacade->delete($id, $this->user->id);
 		$this->flashMessage('Faktura byla úspěšně smazána', 'success');
 		$this->redirect('default');
+	}
+
+
+	/************************ print ************************/
+
+
+	/**
+	 * @param int $id
+	 * @throws BadRequestException
+	 */
+	public function renderPrint($id)
+	{
+		$invoice = $this->invoicesFacade->findOneById($id, $this->user->id);
+		if (!$invoice) {
+			throw new BadRequestException();
+		}
+		$this->template->invoice = $invoice;
+		$this->template->products = $this->invoicesFacade->findProductsById($id);
+		$this->template->company = $this->companiesDao->findOneById($invoice->company_id, $this->user->id);
+		$this->template->client = $this->clientsFacade->findOneById($invoice->client_id, $this->user->id);
 	}
 }

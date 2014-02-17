@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+			{if $invoice->type == 'invoice'}
+				Faktura
+			{elseif $invoice->type == 'credit_note'}
+				Dobropis
+			{/if}
+			-
+			{$invoice->id}
+		</title>
+		<link href="{$basePath}/_/css/style.css" rel="stylesheet" />
+	</head>
+	<body class="container invoice">
+		<h1>
+			{if $invoice->type == 'invoice'}
+				Faktura
+			{elseif $invoice->type == 'credit_note'}
+				Dobropis
+			{/if}
+			-
+			{$invoice->id}
+		</h1>
+		<div class="head">
+			<div class="left padding-bottom company">
+				<table>
+					<tr>
+						<th>Prodávající:</th>
+						<td>{$company->name}</td>
+					</tr>
+					<tr>
+						<th>Adresa:</th>
+						<td>{$company->street}<br>{$company->zip}&nbsp;{$company->city}</td>
+					</tr>
+					<tr>
+						<th>IČ:</th>
+						<td>{$company->company_in}</td>
+					</tr>
+					<tr n:if="$company->vat_id">
+						<th>DIČ:</th>
+						<td>{$company->vat_id}</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="padding-bottom">{$company->trade_register}</td>
+					</tr>
+					<tr n:if="$company->email">
+						<th>E-mail:</th>
+						<td>{$company->email}</td>
+					</tr>
+					<tr n:if="$company->phone">
+						<th>Telefon:</th>
+						<td>{$company->phone}</td>
+					</tr>
+					<tr n:if="$company->website">
+						<th>Web:</th>
+						<td>{$company->website}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="left padding-bottom">
+				<table class="padding-bottom">
+					<tr n:if="$company->bank_account">
+						<th>Bankovní účet:</th>
+						<td>{$company->bank_account}</td>
+					</tr>
+					<tr>
+						<th>Variabilní symbol:</th>
+						<td>{$invoice->id}</td>
+					</tr>
+				</table>
+				<table class="padding-bottom">
+					<tr>
+						<th>Datum vystavení:</th>
+						<td>{$invoice->create_date|date:'j.n.Y'}</td>
+					</tr>
+					<tr>
+						<th>Datum splatnosti:</th>
+						<td>{$invoice->end_date|date:'j.n.Y'}</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<th>Kupující:</th>
+						<td>{$client->name}</td>
+					</tr>
+					<tr>
+						<th>Adresa:</th>
+						<td>{$client->street}<br>{$client->zip}&nbsp;{$client->city}</td>
+					</tr>
+					<tr n:if="$client->company_in">
+						<th>IČ:</th>
+						<td>{$client->company_in}</td>
+					</tr>
+					<tr n:if="$client->vat_id">
+						<th>DIČ:</th>
+						<td>{$client->vat_id}</td>
+					</tr>
+					<tr n:if="$client->email">
+						<th>E-mail:</th>
+						<td>{$client->email}</td>
+					</tr>
+					<tr n:if="$client->phone">
+						<th>Telefon:</th>
+						<td>{$client->phone}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<table class="products">
+			<thead>
+				<tr>
+					<th>Kód</th>
+					<th>Název</th>
+					<th>Ks</th>
+					<th>Cena ks</th>
+					<th>DPH</th>
+					<th>DPH %</th>
+					<th>Cena</th>
+					<th>Záruka</th>
+				</tr>
+			</thead>
+			<tbody>
+				{var $total = 0}
+				<tr n:foreach="$products as $product">
+					{var $fullPrice = $product->price + ($product->price / 100 * $product->tax)}
+					{var $total += $fullPrice * $product->count}
+					<td>{$product->id}</td>
+					<td>{$product->name}</td>
+					<td>{$product->count}</td>
+					<td>{$product->price}</td>
+					<td>{$fullPrice - $product->price}&nbsp;Kč</td>
+					<td>{$product->tax}</td>
+					<td>{$fullPrice * $product->count}&nbsp;Kč</td>
+					<td>
+						{if $product->warranty}
+							{$product->warranty} měsíců
+						{/if}
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="7">Součet</td>
+					<td>{$total}&nbsp;Kč</td>
+				</tr>
+				<tr>
+					{var $round = round($total)}
+					<td colspan="7">Zaokrouhlení</td>
+					<td>{round($round - $total, 2)}&nbsp;Kč</td>
+				</tr>
+				<tr>
+					<th colspan="7">Celkem</th>
+					<th>{$round}&nbsp;Kč</th>
+				</tr>
+			</tfoot>
+		</table>
+	</body>
+</html>
