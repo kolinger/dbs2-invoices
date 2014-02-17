@@ -6,7 +6,7 @@
 		{if $user->loggedIn}
 			<p>
 				Přihlášen {$user->identity->name} |
-				<a n:href="Settings:">Nastavení</a> |
+				{*<a n:href="Settings:">Nastavení</a> |*}
 				<a n:href="Logout:">Odhlásit se</a>
 			</p>
 		{else}
