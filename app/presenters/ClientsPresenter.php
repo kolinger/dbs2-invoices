@@ -113,7 +113,7 @@ class ClientsPresenter extends ProtectedPresenter
 			$this->flashMessage('Klient byl upraven', 'success');
 			$this->redirect('this');
 		} else {
-			$companyId = $this->getParameter('company');
+			$companyId = $this->getSelectedCompany();
 			if ($companyId) {
 				$values->companyId = $companyId;
 			}

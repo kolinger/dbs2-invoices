@@ -25,7 +25,7 @@
 				<td>{$invoice->create_date|date:'j.n.Y'}</td>
 				<td>{$invoice->end_date|date:'j.n.Y'}</td>
 				<td>
-					<a n:href="preview, $invoice->id" class="btn-primary btn-sm">Zobrazit</a>
+					<a n:href="preview, $invoice->id" class="btn-primary btn-sm">Tisk</a>
 					<a n:href="edit, $invoice->id" class="btn-primary btn-sm">Upravit</a>
 					<a n:href="delete, $invoice->id" class="btn btn-danger btn-sm"
 					   data-confirm="Opravdu chcete smazat fakturu {$invoice->id} společnosti {$invoice->company_name}?">Smazat</a>

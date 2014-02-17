@@ -3,20 +3,74 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "00bdd5f00b4bac40756b4e95b36c2162",
+    "hash": "cdcb702e86cdc1ce46ef9ebfa57dc898",
     "packages": [
+        {
+            "name": "kdyby/forms-replicator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kdyby/Replicator.git",
+                "reference": "57f4766c0eb653ab283341d492ec8966a42755e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kdyby/Replicator/zipball/57f4766c0eb653ab283341d492ec8966a42755e5",
+                "reference": "57f4766c0eb653ab283341d492ec8966a42755e5",
+                "shasum": ""
+            },
+            "require": {
+                "nette/nette": "@dev"
+            },
+            "require-dev": {
+                "nette/tester": "@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Kdyby\\Replicator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Filip Procházka",
+                    "homepage": "http://filip-prochazka.com"
+                }
+            ],
+            "description": "Nette forms container replicator aka addDynamic",
+            "homepage": "http://kdyby.org",
+            "keywords": [
+                "Forms",
+                "addDynamic",
+                "kdyby",
+                "nette",
+                "replicator"
+            ],
+            "time": "2014-01-30 16:28:01"
+        },
         {
             "name": "kolinger/square-forms",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kolinger/square-forms.git",
-                "reference": "d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46"
+                "reference": "d34b7c1ca644621a420926d31fba1e3f8abf7bc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kolinger/square-forms/zipball/d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46",
-                "reference": "d9ce7d9af42b6d0c5acf950e5c6595ad6c96da46",
+                "url": "https://api.github.com/repos/kolinger/square-forms/zipball/d34b7c1ca644621a420926d31fba1e3f8abf7bc8",
+                "reference": "d34b7c1ca644621a420926d31fba1e3f8abf7bc8",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +94,7 @@
                     "homepage": "http://tomas.kolinger.name"
                 }
             ],
-            "time": "2014-01-19 18:02:22"
+            "time": "2014-02-17 17:55:29"
         },
         {
             "name": "nette/nette",
@@ -117,7 +171,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kolinger/square-forms": 20
+        "kolinger/square-forms": 20,
+        "kdyby/forms-replicator": 20
     },
     "platform": {
         "php": ">= 5.3.7"

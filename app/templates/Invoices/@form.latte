@@ -1,0 +1,67 @@
+<form role="form" n:name="form" class="ajaxs">
+	<div class="alert alert-danger" n:foreach="$form->errors as $error">{$error}</div>
+
+	<div class="form-group" n:if="isset($form['companyId'])">
+		{label companyId /}
+		{input companyId, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		{label clientId /}
+		{input clientId, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		{label type /}
+		{input type, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		{label createDate /}
+		{input createDate, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		{label endDate /}
+		{input endDate, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		{label comment /}
+		{input comment, class => 'form-control'}
+	</div>
+
+	<div class="form-group">
+		<b>Produkty</b>
+		<div class="products-controls">
+			{input $form['products']['product'], class => 'form-control'}
+			{input $form['products']['add'], class => 'btn btn-default'}
+		</div>
+	</div>
+
+	<div class="form-group" n:foreach="$form['products']->components as $product">
+		{? if (!$product instanceof Nette\Forms\Container) continue; }
+		<div class="products">
+			<b>{$product['name']->value} - </b>
+
+			{label $product['count'] /}
+			{input $product['count'], class => 'form-control small'}
+
+			{label $product['price'] /}
+			{input $product['price'], class => 'form-control small'}
+
+			{label $product['tax'] /}
+			{input $product['tax'], class => 'form-control small'}
+
+			{label $product['warranty'] /}
+			{input $product['warranty'], class => 'form-control small'}
+
+			{input $product['remove'], class => 'btn btn-danger'}
+		</div>
+	</div>
+
+	{input send, class => 'btn btn-default'}
+	{if isset($form['load'])}
+		{input load, style => 'display:none'}
+	{/if}
+</form>

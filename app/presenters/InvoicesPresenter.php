@@ -5,8 +5,8 @@ namespace App\Presenters;
 use App\BootstrapForm;
 use App\VisualPaginator;
 use Nette\Application\BadRequestException;
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
+use Nette\Diagnostics\FireLogger;
 use Nette\Forms\Controls\BaseControl;
 
 
@@ -32,6 +32,12 @@ class InvoicesPresenter extends ProtectedPresenter
 	 * @var \App\Model\PermissionsFacade
 	 */
 	public $permissionsFacade;
+
+	/**
+	 * @inject
+	 * @var \App\Model\ProductsFacade
+	 */
+	public $productsFacade;
 
 
 	/************************ list ************************/
@@ -67,21 +73,20 @@ class InvoicesPresenter extends ProtectedPresenter
 		if (!$companyId && !$id) {
 			$items = $this->permissionsFacade->findAvailableCompaniesInPairs($this->user->id);
 			$form->addSelect('companyId', 'Společnost', $items)
-				->setRequired('Musíte vybrat společnost');
-		} else if ($id && !$companyId) {
-			$invoice = $this->invoicesFacade->findOneById($id, $this->user->id);
-			$companyId = $invoice->company_id;
-		}
+				->setRequired('Musíte vybrat společnost')
+				->controlPrototype->data('dependent-select', 'true');
 
-		if (isset($form['companyId'])) {
 			$form->addDependentSelect('clientId', 'Zákazník', $form['companyId'], function (BaseControl $parent) use ($items) {
 				if (!$parent->value) {
 					reset($items);
 					return $this->clientsFacade->findInPairs(key($items), $this->user->id);
 				}
 				return $this->clientsFacade->findInPairs($parent->value, $this->user->id);
-			})->controlPrototype->data('dependent-select', 'true')->setRequired('Musíte vybrat zákazníka');
+			})->setRequired('Musíte vybrat zákazníka');
 		} else {
+			if ($id) {
+				$companyId = $this->invoicesFacade->findOneById($id, $this->user->id)->company_id;
+			}
 			$items = $this->clientsFacade->findInPairs($companyId, $this->user->id);
 			$form->addSelect('clientId', 'Zákazník', $items)
 				->setRequired('Musíte vybrat zákazníka');
@@ -99,6 +104,45 @@ class InvoicesPresenter extends ProtectedPresenter
 
 		$form->addDate('endDate', 'Datum splatnosti')
 			->setRequired('Musíte vyplnit datum splatnosti');
+
+		$products = json_encode($this->productsFacade->findNames($this->user->id));
+		$form->addDynamic('products', function ($product) use ($products) {
+			$product->addText('count', 'Počet')
+				->setRequired('Musíte vyplnit počet');
+
+			$product->addText('price', 'Cena')
+				->setRequired('Musíte vyplnit cenu');
+
+			$product->addText('tax', 'DPH')
+				->setRequired('Musíte vyplnit DPH');
+
+			$product->addText('warranty', 'Záruka (měsíce)')
+				->setRequired('Musíte vyplnit záruku (zadejte 0 pro žádnou záruku)');
+
+			$product->addSubmit('remove', 'Odebrat')
+				->addRemoveOnClick();
+
+			$product->addHidden('id');
+			$product->addHidden('name');
+		});
+
+		$items = $this->productsFacade->findInPairs($this->user->id);
+		$form['products']->addSelect('product', 'Produkt', $items);
+
+		$form['products']->addSubmit('add', 'Přidat vybraný produkt')
+			->setValidationScope(FALSE)
+			->addCreateOnClick(function ($replicator, $user) {
+				$id = $replicator['product']->getValue();
+				if ($id) {
+					$product = $this->productsFacade->findOneById($id, $this->user->id);
+					$user['count']->setValue(1);
+					$user['price']->setValue($product->price);
+					$user['tax']->setValue($product->tax);
+					$user['warranty']->setValue($product->warranty);
+					$user['name']->setValue($product->name);
+					$user['id']->setValue($id);
+				}
+			});
 
 		$form->addTextArea('comment', 'Poznámka');
 
@@ -127,20 +171,33 @@ class InvoicesPresenter extends ProtectedPresenter
 
 		$values = $form->getValues();
 
+		$products = array();
+		foreach ($values->products as $product) {
+			if (!is_scalar($product)) {
+				$products[] = $product;
+			}
+		}
+
+		if (!count($products)) {
+			$form->addError('Musíte přidat alespoň jeden produkt');
+			return;
+		}
+
 		$id = $this->getParameter('id');
 		if ($id) {
 			$this->invoicesFacade->update($id, $this->user->id, $values->clientId, $values->type, $values->createDate,
-				$values->endDate, $values->comment);
+				$values->endDate, $values->comment, $products);
 
 			$this->flashMessage('Faktura byla upravena', 'success');
 			$this->redirect('this');
 		} else {
-			$companyId = $this->getParameter('company');
+			$companyId = $this->getSelectedCompany();
 			if ($companyId) {
 				$values->companyId = $companyId;
 			}
+
 			$this->invoicesFacade->create($values->companyId, $values->clientId, $values->type, $values->createDate,
-				$values->endDate, $values->comment);
+				$values->endDate, $values->comment, $products);
 
 			$this->flashMessage('Faktura byla vytvořena', 'success');
 			$this->redirect('default');
@@ -164,13 +221,29 @@ class InvoicesPresenter extends ProtectedPresenter
 
 		$this->template->invoice = $invoice;
 
-		$this['form']->setDefaults(array(
+		$form = $this['form'];
+		$form->setDefaults(array(
+			'companyId' => $invoice->company_id,
 			'clientId' => $invoice->client_id,
 			'type' => $invoice->type,
 			'createDate' => $invoice->create_date,
 			'endDate' => $invoice->end_date,
 			'comment' => $invoice->comment,
 		));
+		if (!$form->isSubmitted()) {
+			$number = 0;
+			$products = $this->invoicesFacade->findProductsById($id);
+			foreach ($products as $product) {
+				$form['products'][++$number]->setValues(array(
+					'name' => $product->name,
+					'price' => $product->price,
+					'id' => $product->id,
+					'tax' => $product->tax,
+					'count' => $product->count,
+					'warranty' => $product->warranty,
+				));
+			}
+		}
 
 		if ($this->isAjax()) {
 			$this->redrawControl('form');

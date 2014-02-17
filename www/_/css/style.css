@@ -10,3 +10,22 @@
 .company-select {
 	line-height: 45px;
 }
+
+.products-controls .form-control {
+	width: 200px;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.products .form-control {
+	width: 200px;
+	display: inline-block;
+}
+
+.products .small {
+	width: 100px;
+}
+
+.products .btn {
+	margin-left: 10px;
+}

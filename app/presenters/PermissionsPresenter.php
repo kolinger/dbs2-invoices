@@ -91,6 +91,9 @@ class PermissionsPresenter extends ProtectedPresenter
 		$values = $form->getValues();
 
 		$companyId = $this->getParameter('company');
+		if (!$companyId) {
+			$companyId = $this->getSelectedCompany();
+		}
 		$managerId = $this->getParameter('manager');
 		if ($managerId && $companyId) {
 			$this->permissionsFacade->update($companyId, $managerId, $this->user->id, $values->roleCompany,

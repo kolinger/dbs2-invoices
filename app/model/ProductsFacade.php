@@ -36,6 +36,39 @@ class ProductsFacade extends Facade
 
 	/**
 	 * @param int $userId
+	 * @return array
+	 */
+	public function findInPairs($userId)
+	{
+		$products = $this->createSelection($userId)->fetchAll();
+		$pairs = array();
+		foreach ($products as $product) {
+			$pairs[$product->id] = $product->name;
+			if ($product->count !== NULL) {
+				$pairs[$product->id] .= ' (' . $product->count . 'x)';
+			}
+		}
+		return $pairs;
+	}
+
+
+	/**
+	 * @param int $userId
+	 * @return array
+	 */
+	public function findNames($userId)
+	{
+		$products = $this->createSelection($userId)->fetchAll();
+		$names = array();
+		foreach ($products as $product) {
+			$names[] = $product->name;
+		}
+		return $names;
+	}
+
+
+	/**
+	 * @param int $userId
 	 * @return int
 	 */
 	public function count($userId)

@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.3.2
 -- Dumped by pg_dump version 9.3.1
--- Started on 2014-02-15 00:46:25
+-- Started on 2014-02-17 20:55:39
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -312,7 +312,8 @@ CREATE TABLE products (
     count integer,
     price money,
     tax smallint,
-    comment text
+    comment text,
+    warranty smallint
 );
 
 
@@ -371,7 +372,7 @@ CREATE VIEW v_companies AS
 ALTER TABLE public.v_companies OWNER TO invoices;
 
 --
--- TOC entry 190 (class 1259 OID 24818)
+-- TOC entry 191 (class 1259 OID 24835)
 -- Name: v_invoices; Type: VIEW; Schema: public; Owner: invoices
 --
 
@@ -385,7 +386,9 @@ CREATE VIEW v_invoices AS
     i.comment,
     c.name AS company_name,
     c2.name AS client_name,
-    0 AS amount,
+    ( SELECT sum((ip.count * ip.price)) AS sum
+           FROM invoices_products ip
+          WHERE (ip.invoice_id = i.id)) AS amount,
     p.manager_id
    FROM (((invoices i
    JOIN companies c ON ((c.id = i.company_id)))
@@ -396,7 +399,7 @@ CREATE VIEW v_invoices AS
 ALTER TABLE public.v_invoices OWNER TO invoices;
 
 --
--- TOC entry 191 (class 1259 OID 24826)
+-- TOC entry 190 (class 1259 OID 24826)
 -- Name: v_payments; Type: VIEW; Schema: public; Owner: invoices
 --
 
@@ -408,7 +411,8 @@ CREATE VIEW v_payments AS
     p.comment,
     c.name AS company_name,
     c2.name AS client_name,
-    p2.manager_id
+    p2.manager_id,
+    i.company_id
    FROM ((((payments p
    JOIN invoices i ON ((i.id = p.invoice_id)))
    JOIN companies c ON ((c.id = i.company_id)))
@@ -457,7 +461,8 @@ CREATE VIEW v_products AS
     p.tax,
     p.comment,
     c.name AS company_name,
-    p2.manager_id
+    p2.manager_id,
+    p.warranty
    FROM ((products p
    JOIN companies c ON ((c.id = p.company_id)))
    LEFT JOIN permissions p2 ON (((p.company_id = p2.company_id) AND (p2.role_clients = true))));
@@ -586,23 +591,23 @@ CREATE RULE delete AS
 
 
 --
--- TOC entry 2050 (class 2618 OID 24824)
--- Name: delete; Type: RULE; Schema: public; Owner: invoices
---
-
-CREATE RULE delete AS
-    ON DELETE TO v_invoices DO INSTEAD  DELETE FROM invoices
-  WHERE (invoices.id = old.id);
-
-
---
--- TOC entry 2053 (class 2618 OID 24831)
+-- TOC entry 2050 (class 2618 OID 24831)
 -- Name: delete; Type: RULE; Schema: public; Owner: invoices
 --
 
 CREATE RULE delete AS
     ON DELETE TO v_payments DO INSTEAD  DELETE FROM payments
   WHERE (payments.id = old.id);
+
+
+--
+-- TOC entry 2053 (class 2618 OID 24840)
+-- Name: delete; Type: RULE; Schema: public; Owner: invoices
+--
+
+CREATE RULE delete AS
+    ON DELETE TO v_invoices DO INSTEAD  DELETE FROM invoices
+  WHERE (invoices.id = old.id);
 
 
 --
@@ -646,23 +651,23 @@ CREATE RULE update AS
 
 
 --
--- TOC entry 2051 (class 2618 OID 24825)
--- Name: update; Type: RULE; Schema: public; Owner: invoices
---
-
-CREATE RULE update AS
-    ON UPDATE TO v_invoices DO INSTEAD  UPDATE invoices SET client_id = new.client_id, type = new.type, create_date = new.create_date, end_date = new.end_date, comment = new.comment
-  WHERE (invoices.id = old.id);
-
-
---
--- TOC entry 2054 (class 2618 OID 24832)
+-- TOC entry 2051 (class 2618 OID 24832)
 -- Name: update; Type: RULE; Schema: public; Owner: invoices
 --
 
 CREATE RULE update AS
     ON UPDATE TO v_payments DO INSTEAD  UPDATE payments SET amount = new.amount, date = new.date, comment = new.comment
   WHERE (payments.id = old.id);
+
+
+--
+-- TOC entry 2054 (class 2618 OID 24841)
+-- Name: update; Type: RULE; Schema: public; Owner: invoices
+--
+
+CREATE RULE update AS
+    ON UPDATE TO v_invoices DO INSTEAD  UPDATE invoices SET client_id = new.client_id, type = new.type, create_date = new.create_date, end_date = new.end_date, comment = new.comment
+  WHERE (invoices.id = old.id);
 
 
 --
@@ -758,7 +763,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2014-02-15 00:46:25
+-- Completed on 2014-02-17 20:55:39
 
 --
 -- PostgreSQL database dump complete

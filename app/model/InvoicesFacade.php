@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Nette\ArrayHash;
 use Nette\Database\Table\IRow;
 use Nette\Database\Table\Selection;
 
@@ -35,6 +36,38 @@ class InvoicesFacade extends Facade
 
 
 	/**
+	 * @param int $id
+	 * @return array
+	 */
+	public function findProductsById($id)
+	{
+		$items = $this->context->table('invoices_products')
+			->where('invoice_id', $id)
+			->fetchAll();
+
+		$ids = array();
+		$products = array();
+		foreach ($items as $product) {
+			$products[] = ArrayHash::from(array(
+				'id' => $product->product_id,
+				'price' => $product->price,
+				'count' => $product->count,
+				'tax' => $product->tax,
+				'warranty' => $product->warranty,
+			));
+			$ids[] = $product->product_id;
+		}
+
+		$names = $this->context->table('products')->where('id', $ids)->fetchPairs('id', 'name');
+		foreach ($products as $product) {
+			$product->name = $names[$product->id];
+		}
+
+		return $products;
+	}
+
+
+	/**
 	 * @param int $userId
 	 * @return int
 	 */
@@ -51,8 +84,9 @@ class InvoicesFacade extends Facade
 	 * @param \DateTime $createDate
 	 * @param \DateTime $endDate
 	 * @param string $comment
+	 * @param array $products
 	 */
-	public function create($companyId, $clientId, $type, $createDate, $endDate, $comment)
+	public function create($companyId, $clientId, $type, $createDate, $endDate, $comment, array $products)
 	{
 		$values = array(
 			'company_id' => $companyId,
@@ -62,7 +96,18 @@ class InvoicesFacade extends Facade
 			'end_date' => $endDate,
 			'comment' => $comment,
 		);
-		$this->context->table('invoices')->insert($values);
+		$id = $this->context->table('invoices')->insert($values);
+		foreach ($products as $product) {
+			$values = array(
+				'invoice_id' => $id,
+				'product_id' => $product->id,
+				'price' => $product->price,
+				'tax' => $product->tax,
+				'count' => $product->count,
+				'warranty' => $product->warranty,
+			);
+			$this->context->table('invoices_products')->insert($values);
+		}
 	}
 
 
@@ -74,8 +119,9 @@ class InvoicesFacade extends Facade
 	 * @param \DateTime $createDate
 	 * @param \DateTime $endDate
 	 * @param string $comment
+	 * @param array $products
 	 */
-	public function update($id, $userId, $clientId, $type, $createDate, $endDate, $comment)
+	public function update($id, $userId, $clientId, $type, $createDate, $endDate, $comment, array $products)
 	{
 		$values = array(
 			'client_id' => $clientId,
@@ -85,6 +131,19 @@ class InvoicesFacade extends Facade
 			'comment' => $comment,
 		);
 		$this->context->query('UPDATE v_invoices SET ? WHERE id = ? AND manager_id = ?', $values, $id, $userId);
+
+		$this->context->table('invoices_products')->where('invoice_id', $id)->delete();
+		foreach ($products as $product) {
+			$values = array(
+				'invoice_id' => $id,
+				'product_id' => $product->id,
+				'price' => $product->price,
+				'tax' => $product->tax,
+				'count' => $product->count,
+				'warranty' => $product->warranty,
+			);
+			$this->context->table('invoices_products')->insert($values);
+		}
 	}
 
 
