@@ -55,6 +55,7 @@ class RegistrationPresenter extends BasePresenter
 		try {
 			$this->managersFacade->create($values->username, $values->password);
 			$this->user->login($values->username, $values->password);
+			$this->resetSelectedCompany();
 			$this->flashMessage('Váš účet byl úspěšně vytvořen, nyní si můžete vytvořit vaší společnost', 'success');
 			$this->redirect('Companies:create');
 		} catch (\PDOException $e) {

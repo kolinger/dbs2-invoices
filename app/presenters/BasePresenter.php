@@ -67,4 +67,12 @@ abstract class BasePresenter extends Presenter
 		$settings = $this->session->getSection('settings');
 		return $settings && isset($settings->company) ? $settings->company : NULL;
 	}
+
+	public function resetSelectedCompany()
+	{
+		$settings = $this->session->getSection('settings');
+		if ($settings && isset($settings->company)) {
+			unset($settings->company);
+		}
+	}
 }
