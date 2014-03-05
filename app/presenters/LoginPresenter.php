@@ -50,6 +50,7 @@ class LoginPresenter extends BasePresenter
 
 		try {
 			$this->user->login($values->username, $values->password);
+			$this->resetSelectedCompany();
 			$this->flashMessage('Přihlášení proběhlo úspěšně', 'success');
 			if ($this->backlink) {
 				$this->restoreRequest($this->backlink);
