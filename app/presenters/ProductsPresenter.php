@@ -107,6 +107,9 @@ class ProductsPresenter extends ProtectedPresenter
 			if ($companyId) {
 				$values->companyId = $companyId;
 			}
+			if (!$values->compadyId) {
+				$values->companyId = $this->getSelectedCompany();
+			}
 			$this->productsFacade->create($values->companyId, $values->name, $values->count, $values->price,
 				$values->tax, $values->comment);
 
