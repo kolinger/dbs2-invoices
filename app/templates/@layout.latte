@@ -14,14 +14,27 @@
 		<meta name="description" content="Jednoduchý systém na zprávu faktur (školní projekt - DBS2)"/>
 		<meta name="author" content="Tomáš Kolinger, Tomáš Limberk"/>
 
-		<link rel="stylesheet" href="{$basePath}/_/css/reset.css"/>
-		<link rel="stylesheet" href="{$basePath}/_/jquery-ui/jquery-ui-1.10.4.css"/>
-		<link rel="stylesheet" href="{$basePath}/_/css/bootstrap.css"/>
-		<link rel="stylesheet" href="{$basePath}/_/css/bootstrap-theme.css"/>
-		<link rel="stylesheet" href="{$basePath}/_/css/style.css"/>
+		{if !\Nette\Diagnostics\Debugger::$productionMode}
+			<link rel="stylesheet" href="{$basePath}/assets/css/reset.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/jquery-ui-1.10.4.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/bootstrap.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/bootstrap-theme.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/style.css"/>
+		{else}
+			<link rel="stylesheet" href="{$basePath}/assets/output/styles.css" />
+		{/if}
 
-		<!--<script src="{$basePath}/_/js/prefixfree.min.js"></script>-->
-		<script src="{$basePath}/_/js/modernizr-2.7.0.dev.js"></script>
+		{if !\Nette\Diagnostics\Debugger::$productionMode}
+			<script src="{$basePath}/assets/js/modernizr-2.7.0.min.js"></script>
+			<script src="{$basePath}/assets/js/jquery-1.10.2.min.js"></script>
+			<script src="{$basePath}/assets/js/bootstrap.js"></script>
+			<script src="{$basePath}/assets/js/jquery.nette-ajax.js"></script>
+			<script src="{$basePath}/assets/js/jquery-ui-1.10.4.js"></script>
+			<script src="{$basePath}/assets/js/jquery-ui-timepicker-addon.js"></script>
+			<script src="{$basePath}/assets/js/functions.js"></script>
+		{else}
+			<script src="{$basePath}/assets/output/scripts.js"></script>
+		{/if}
 	</head>
 	<body>
 		<div class="container">
@@ -42,13 +55,6 @@
 			to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google
 			Chrome Frame</a> to experience this site.</p><![endif]-->
 
-		<script src="{$basePath}/_/js/jquery-1.10.2.min.js"></script>
-		<script src="{$basePath}/_/js/bootstrap.js"></script>
-		<script src="{$basePath}/_/js/jquery.nette-ajax.js"></script>
-		<script src="{$basePath}/_/jquery-ui/jquery-ui-1.10.4.js"></script>
-		<script src="{$basePath}/_/js/jquery-ui-timepicker-addon.js"></script>
-		{*<script src="{$basePath}/_/js/netteForms.js"></script>*}
-		<script src="{$basePath}/_/js/functions.js"></script>
 		{block scripts}{/block}
 	</body>
 </html>
