@@ -190,9 +190,8 @@ class InvoicesPresenter extends ProtectedPresenter
 			$this->flashMessage('Faktura byla upravena', 'success');
 			$this->redirect('this');
 		} else {
-			$companyId = $this->getSelectedCompany();
-			if ($companyId) {
-				$values->companyId = $companyId;
+			if (!isset($values->companyId)) {
+				$values->companyId = $this->getSelectedCompany();
 			}
 
 			$this->invoicesFacade->create($values->companyId, $values->clientId, $values->type, $values->createDate,

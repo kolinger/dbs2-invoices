@@ -113,9 +113,8 @@ class ClientsPresenter extends ProtectedPresenter
 			$this->flashMessage('Klient byl upraven', 'success');
 			$this->redirect('this');
 		} else {
-			$companyId = $this->getSelectedCompany();
-			if ($companyId) {
-				$values->companyId = $companyId;
+			if (!isset($values->companyId)) {
+				$values->companyId = $this->getSelectedCompany();
 			}
 			$this->clientsFacade->create($values->companyId, $values->name, $values->street, $values->city,
 				$values->zip, $values->companyIn, $values->vatId, $values->email, $values->phone, $values->comment);

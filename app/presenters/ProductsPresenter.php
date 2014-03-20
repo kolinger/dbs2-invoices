@@ -103,11 +103,7 @@ class ProductsPresenter extends ProtectedPresenter
 			$this->flashMessage('Produkt byl upraven', 'success');
 			$this->redirect('this');
 		} else {
-			$companyId = $this->getParameter('company');
-			if ($companyId) {
-				$values->companyId = $companyId;
-			}
-			if (!$values->compadyId) {
+			if (!isset($values->companyId)) {
 				$values->companyId = $this->getSelectedCompany();
 			}
 			$this->productsFacade->create($values->companyId, $values->name, $values->count, $values->price,
