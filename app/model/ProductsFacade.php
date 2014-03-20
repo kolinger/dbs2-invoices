@@ -40,15 +40,7 @@ class ProductsFacade extends Facade
 	 */
 	public function findInPairs($userId)
 	{
-		$products = $this->createSelection($userId)->fetchAll();
-		$pairs = array();
-		foreach ($products as $product) {
-			$pairs[$product->id] = $product->name;
-			if ($product->count !== NULL) {
-				$pairs[$product->id] .= ' (' . $product->count . 'x)';
-			}
-		}
-		return $pairs;
+		return $this->createSelection($userId)->fetchPairs('id', 'name');
 	}
 
 
@@ -80,17 +72,15 @@ class ProductsFacade extends Facade
 	/**
 	 * @param int $companyId
 	 * @param string $name
-	 * @param int $count
 	 * @param float $price
 	 * @param int $tax
 	 * @param string $comment
 	 */
-	public function create($companyId, $name, $count, $price, $tax, $comment)
+	public function create($companyId, $name, $price, $tax, $comment)
 	{
 		$values = array(
 			'company_id' => $companyId,
 			'name' => $name,
-			'count' => $count == '' ? NULL : $count,
 			'price' => $price == '' ? NULL : $price,
 			'tax' => $tax == '' ? NULL : $tax,
 			'comment' => $comment,
@@ -103,16 +93,14 @@ class ProductsFacade extends Facade
 	 * @param int $id
 	 * @param int $userId
 	 * @param string $name
-	 * @param int $count
 	 * @param float $price
 	 * @param int $tax
 	 * @param string $comment
 	 */
-	public function update($id, $userId, $name, $count, $price, $tax, $comment)
+	public function update($id, $userId, $name, $price, $tax, $comment)
 	{
 		$values = array(
 			'name' => $name,
-			'count' => $count == '' ? NULL : $count,
 			'price' => $price == '' ? NULL : $price,
 			'tax' => $tax == '' ? NULL : $tax,
 			'comment' => $comment,

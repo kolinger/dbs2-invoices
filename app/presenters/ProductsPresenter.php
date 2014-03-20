@@ -66,11 +66,6 @@ class ProductsPresenter extends ProtectedPresenter
 		$form->addText('name', 'Název')
 			->setRequired('Musíte vyplnit název');
 
-		$form->addText('count', 'Počet')
-			->addCondition(Form::FILLED)
-				->addRule(function ($control) { return preg_match('~^[0-9]+$~', $control->value); },
-				'Počet musí být celé kladné číslo');
-
 		$form->addText('price', 'Cena');
 
 		$form->addText('tax', 'DPH')
@@ -97,7 +92,7 @@ class ProductsPresenter extends ProtectedPresenter
 
 		$id = $this->getParameter('id');
 		if ($id) {
-			$this->productsFacade->update($id, $this->user->id, $values->name, $values->count, $values->price,
+			$this->productsFacade->update($id, $this->user->id, $values->name, $values->price,
 				$values->tax, $values->comment);
 
 			$this->flashMessage('Produkt byl upraven', 'success');
@@ -106,7 +101,7 @@ class ProductsPresenter extends ProtectedPresenter
 			if (!isset($values->companyId)) {
 				$values->companyId = $this->getSelectedCompany();
 			}
-			$this->productsFacade->create($values->companyId, $values->name, $values->count, $values->price,
+			$this->productsFacade->create($values->companyId, $values->name, $values->price,
 				$values->tax, $values->comment);
 
 			$this->flashMessage('Produkt byl vytvořen', 'success');
@@ -133,7 +128,6 @@ class ProductsPresenter extends ProtectedPresenter
 
 		$this['form']->setDefaults(array(
 			'name' => $product->name,
-			'count' => $product->count,
 			'price' => $product->price,
 			'tax' => $product->tax,
 			'comment' => $product->comment,
