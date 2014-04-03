@@ -11,7 +11,15 @@
 			-
 			{$invoice->id}
 		</title>
-		<link href="{$basePath}/_/css/style.css" rel="stylesheet" />
+		{if !\Nette\Diagnostics\Debugger::$productionMode}
+			<link rel="stylesheet" href="{$basePath}/assets/css/reset.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/jquery-ui-1.10.4.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/bootstrap.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/bootstrap-theme.css"/>
+			<link rel="stylesheet" href="{$basePath}/assets/css/style.css"/>
+		{else}
+			<link rel="stylesheet" href="{$basePath}/assets/output/styles.css" />
+		{/if}
 	</head>
 	<body class="container invoice">
 		<h1>
