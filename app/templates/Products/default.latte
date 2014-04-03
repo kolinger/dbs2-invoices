@@ -18,7 +18,7 @@
 			<tr n:foreach="$products as $product">
 				<td n:if="!$presenter->getSelectedCompany()">{$product->company_name}</td>
 				<td>{$product->name}</td>
-				<td>{if $product->price == NULL}neuvedeno{else}{$product->price}{/if}</td>
+				<td>{if $product->price == NULL}neuvedeno{else}{$product->price} Kč{/if}</td>
 				<td>{if $product->tax == NULL}neuvedeno{else}{$product->tax}%{/if}</td>
 				<td>
 					<a n:href="edit, $product->id" class="btn-primary btn-sm">Upravit</a>

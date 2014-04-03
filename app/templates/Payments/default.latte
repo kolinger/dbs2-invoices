@@ -20,7 +20,7 @@
 				<td n:if="!$presenter->getSelectedCompany()">{$payment->company_name}</td>
 				<td>{$payment->invoice_id}</td>
 				<td>{$payment->client_name}</td>
-				<td>{$payment->amount}</td>
+				<td>{$payment->amount} Kč</td>
 				<td>{$payment->date|date:'j.n.Y'}</td>
 				<td>
 					<a n:href="edit, $payment->id" class="btn-primary btn-sm">Upravit</a>

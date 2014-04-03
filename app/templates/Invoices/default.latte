@@ -9,8 +9,10 @@
 			<tr>
 				<th n:if="!$presenter->getSelectedCompany()">Společnost</th>
 				<th>ID</th>
+				<th>Stav</th>
 				<th>Zákazník</th>
 				<th>Částka</th>
+				<th>Zaplaceno</th>
 				<th>Datum vytvoření</th>
 				<th>Datum splatnosti</th>
 				<th>Akce</th>
@@ -20,8 +22,18 @@
 			<tr n:foreach="$invoices as $invoice">
 				<td n:if="!$presenter->getSelectedCompany()">{$invoice->company_name}</td>
 				<td>{$invoice->id}</td>
+				<td>
+					{if $invoice->amount == $invoice->payed}
+						<span class="label label-success">Zaplaceno</span>
+					{elseif $invoice->amount < $invoice->payed}
+						<span class="label label-success">Přeplacneo ({$invoice->payed - $invoice->amount} Kč)</span>
+					{else}
+						<span class="label label-danger">Nezaplaceno ({$invoice->amount - $invoice->payed} Kč)</span>
+					{/if}
+				</td>
 				<td>{$invoice->client_name}</td>
-				<td>{$invoice->amount}</td>
+				<td>{intval($invoice->amount)} Kč</td>
+				<td>{intval($invoice->payed)} Kč</td>
 				<td>{$invoice->create_date|date:'j.n.Y'}</td>
 				<td>{$invoice->end_date|date:'j.n.Y'}</td>
 				<td>
