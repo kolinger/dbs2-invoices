@@ -88,7 +88,7 @@ class PaymentsPresenter extends ProtectedPresenter
 
 		$id = $this->getParameter('id');
 		if ($id) {
-			$this->paymentsFacade->update($id, $this->user->id, $values->amount, $values->date, $values->comment);
+			$this->paymentsFacade->update($id, $this->user->id, (float) $values->amount, $values->date, $values->comment);
 
 			$this->flashMessage('Platba byla upravena', 'success');
 			$this->redirect('this');
@@ -99,7 +99,7 @@ class PaymentsPresenter extends ProtectedPresenter
 				return;
 			}
 
-			$this->paymentsFacade->create($invoice->id, $values->amount, $values->date,
+			$this->paymentsFacade->create($invoice->id, (float) $values->amount, $values->date,
 				$values->comment);
 
 			$this->flashMessage('Platba byla vytvořena', 'success');

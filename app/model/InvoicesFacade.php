@@ -101,7 +101,7 @@ class InvoicesFacade extends Facade
 			$values = array(
 				'invoice_id' => $id,
 				'product_id' => $product->id,
-				'price' => $product->price,
+				'price' => (float) $product->price,
 				'tax' => $product->tax,
 				'count' => $product->count,
 				'warranty' => $product->warranty,
@@ -137,7 +137,7 @@ class InvoicesFacade extends Facade
 			$values = array(
 				'invoice_id' => $id,
 				'product_id' => $product->id,
-				'price' => $product->price,
+				'price' => (float) $product->price,
 				'tax' => $product->tax,
 				'count' => $product->count,
 				'warranty' => $product->warranty,

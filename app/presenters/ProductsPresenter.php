@@ -92,7 +92,7 @@ class ProductsPresenter extends ProtectedPresenter
 
 		$id = $this->getParameter('id');
 		if ($id) {
-			$this->productsFacade->update($id, $this->user->id, $values->name, $values->price,
+			$this->productsFacade->update($id, $this->user->id, $values->name, (float) $values->price,
 				$values->tax, $values->comment);
 
 			$this->flashMessage('Produkt byl upraven', 'success');
@@ -101,7 +101,7 @@ class ProductsPresenter extends ProtectedPresenter
 			if (!isset($values->companyId)) {
 				$values->companyId = $this->getSelectedCompany();
 			}
-			$this->productsFacade->create($values->companyId, $values->name, $values->price,
+			$this->productsFacade->create($values->companyId, $values->name, (float) $values->price,
 				$values->tax, $values->comment);
 
 			$this->flashMessage('Produkt byl vytvořen', 'success');

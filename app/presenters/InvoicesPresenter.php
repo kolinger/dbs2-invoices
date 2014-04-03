@@ -107,16 +107,22 @@ class InvoicesPresenter extends ProtectedPresenter
 		$products = json_encode($this->productsFacade->findNames($this->user->id));
 		$form->addDynamic('products', function ($product) use ($products) {
 			$product->addText('count', 'Počet')
-				->setRequired('Musíte vyplnit počet');
+				->setRequired('Musíte vyplnit počet')
+				->addRule(function ($control) { return preg_match('~^[0-9]+$~', $control->value); },
+					'Počet musí být celé kladné číslo');
 
 			$product->addText('price', 'Cena')
 				->setRequired('Musíte vyplnit cenu');
 
 			$product->addText('tax', 'DPH')
-				->setRequired('Musíte vyplnit DPH');
+				->setRequired('Musíte vyplnit DPH')
+				->addRule(function ($control) { return preg_match('~^[0-9]+$~', $control->value); },
+					'DPH musí být celé kladné číslo');
 
 			$product->addText('warranty', 'Záruka (měsíce)')
-				->setRequired('Musíte vyplnit záruku (zadejte 0 pro žádnou záruku)');
+				->setRequired('Musíte vyplnit záruku (zadejte 0 pro žádnou záruku)')
+				->addRule(function ($control) { return preg_match('~^[0-9]+$~', $control->value); },
+					'Záruka musí být celé kladné číslo');
 
 			$product->addSubmit('remove', 'Odebrat')
 				->addRemoveOnClick();
