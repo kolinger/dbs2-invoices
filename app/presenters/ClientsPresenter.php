@@ -26,6 +26,11 @@ class ClientsPresenter extends ProtectedPresenter
 	 */
 	public $permissionsFacade;
 
+	/**
+	 * @persistent
+	 * @var string
+	 */
+	public $query;
 
 	/************************ list ************************/
 
@@ -36,8 +41,32 @@ class ClientsPresenter extends ProtectedPresenter
 		$paginator = $paginator->getPaginator();
 		$paginator->itemCount = $this->clientsFacade->count($this->user->id);
 		$paginator->itemsPerPage = 20;
-		$this->template->clients = $this->clientsFacade->findAll($paginator->offset, $paginator->itemsPerPage,
+		$this->template->clients = $this->clientsFacade->findAll($this->query, $paginator->offset, $paginator->itemsPerPage,
 			$this->user->id);
+
+		$this['filterForm']->setDefaults(array(
+			'query' => $this->query,
+		));
+	}
+
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentFilterForm()
+	{
+		$form = new Form;
+
+		$form->addText('query');
+
+		$form->addSubmit('send', 'Hledat');
+
+		$presenter = $this;
+		$form->onSuccess[] = function (Form $form) use ($presenter) {
+			$presenter->query = $form->getValues()->query;
+			$presenter->redirect('this');
+		};
+		return $form;
 	}
 
 

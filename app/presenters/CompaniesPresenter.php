@@ -20,6 +20,12 @@ class CompaniesPresenter extends ProtectedPresenter
 	 */
 	public $companiesFacade;
 
+	/**
+	 * @persistent
+	 * @var string
+	 */
+	public $query;
+
 
 	/************************ list ************************/
 
@@ -30,10 +36,33 @@ class CompaniesPresenter extends ProtectedPresenter
 		$paginator = $paginator->getPaginator();
 		$paginator->itemCount = $this->companiesFacade->count($this->user->id);
 		$paginator->itemsPerPage = 20;
-		$this->template->companies = $this->companiesFacade->findAll($paginator->offset, $paginator->itemsPerPage,
+		$this->template->companies = $this->companiesFacade->findAll($this->query, $paginator->offset, $paginator->itemsPerPage,
 			$this->user->id);
+
+		$this['filterForm']->setDefaults(array(
+			'query' => $this->query,
+		));
 	}
 
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentFilterForm()
+	{
+		$form = new Form;
+
+		$form->addText('query');
+
+		$form->addSubmit('send', 'Hledat');
+
+		$presenter = $this;
+		$form->onSuccess[] = function (Form $form) use ($presenter) {
+			$presenter->query = $form->getValues()->query;
+			$presenter->redirect('this');
+		};
+		return $form;
+	}
 
 	/************************ form ************************/
 

@@ -23,14 +23,29 @@ class PaymentsFacade extends Facade
 
 
 	/**
+	 * @param string $query
 	 * @param int $offset
 	 * @param int $limit
 	 * @param int $userId
 	 * @return array
 	 */
-	public function findAll($offset = 0, $limit = 20, $userId)
+	public function findAll($query, $offset = 0, $limit = 20, $userId)
 	{
-		return $this->createSelection($userId)->limit($limit, $offset)->order('id DESC')->fetchAll();
+		$selection = $this->createSelection($userId)->limit($limit, $offset)->order('id DESC');
+
+		if ($query) {
+			$query = '%' . $query . '%';
+			$selection->where('(
+				company_name LIKE ? OR
+				CAST(invoice_id AS text) LIKE ? OR
+				client_name LIKE ? OR
+				CAST(amount AS text) LIKE ? OR
+				CAST(date AS text) LIKE ?
+				)', $query, $query, $query, $query, $query
+			);
+		}
+
+		return $selection->fetchAll();
 	}
 
 

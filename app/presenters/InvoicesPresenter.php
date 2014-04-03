@@ -38,6 +38,18 @@ class InvoicesPresenter extends ProtectedPresenter
 	 */
 	public $productsFacade;
 
+	/**
+	 * @persistent
+	 * @var string
+	 */
+	public $query;
+
+	/**
+	 * @persistent
+	 * @var int
+	 */
+	public $state;
+
 
 	/************************ list ************************/
 
@@ -48,8 +60,40 @@ class InvoicesPresenter extends ProtectedPresenter
 		$paginator = $paginator->getPaginator();
 		$paginator->itemCount = $this->invoicesFacade->count($this->user->id);
 		$paginator->itemsPerPage = 20;
-		$this->template->invoices = $this->invoicesFacade->findAll($paginator->offset, $paginator->itemsPerPage,
-			$this->user->id);
+		$this->template->invoices = $this->invoicesFacade->findAll($this->query, $this->state, $paginator->offset,
+			$paginator->itemsPerPage, $this->user->id);
+
+		$this['filterForm']->setDefaults(array(
+			'query' => $this->query,
+			'state' => $this->state,
+		));
+	}
+
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentFilterForm()
+	{
+		$form = new Form;
+
+		$form->addText('query');
+
+		$form->addSelect('state', NULL, array(
+			'- vyberte stav -',
+			'Zaplaceno',
+			'Nezaplaceno',
+		));
+
+		$form->addSubmit('send', 'Hledat');
+
+		$presenter = $this;
+		$form->onSuccess[] = function (Form $form) use ($presenter) {
+			$presenter->query = $form->getValues()->query;
+			$presenter->state = $form->getValues()->state;
+			$presenter->redirect('this');
+		};
+		return $form;
 	}
 
 

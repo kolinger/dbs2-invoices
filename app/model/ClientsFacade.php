@@ -23,14 +23,31 @@ class ClientsFacade extends Facade
 
 
 	/**
+	 * @param string $query
 	 * @param int $offset
 	 * @param int $limit
 	 * @param int $userId
 	 * @return array
 	 */
-	public function findAll($offset = 0, $limit = 20, $userId)
+	public function findAll($query, $offset = 0, $limit = 20, $userId)
 	{
-		return $this->createSelection($userId)->limit($limit, $offset)->fetchAll();
+		$selection = $this->createSelection($userId)->limit($limit, $offset);
+
+		if ($query) {
+			$query = '%' . $query . '%';
+			$selection->where('(
+				company_name LIKE ? OR
+				name LIKE ? OR
+				street LIKE ? OR
+				city LIKE ? OR
+				zip LIKE ? OR
+				company_in LIKE ? OR
+				vat_id LIKE ?
+				)', $query, $query, $query, $query, $query, $query, $query
+			);
+		}
+
+		return $selection->fetchAll();
 	}
 
 

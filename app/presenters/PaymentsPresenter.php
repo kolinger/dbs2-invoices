@@ -32,6 +32,11 @@ class PaymentsPresenter extends ProtectedPresenter
 	 */
 	public $permissionsFacade;
 
+	/**
+	 * @persistent
+	 * @var string
+	 */
+	public $query;
 
 	/************************ list ************************/
 
@@ -42,8 +47,32 @@ class PaymentsPresenter extends ProtectedPresenter
 		$paginator = $paginator->getPaginator();
 		$paginator->itemCount = $this->paymentsFacade->count($this->user->id);
 		$paginator->itemsPerPage = 20;
-		$this->template->payments = $this->paymentsFacade->findAll($paginator->offset, $paginator->itemsPerPage,
+		$this->template->payments = $this->paymentsFacade->findAll($this->query, $paginator->offset, $paginator->itemsPerPage,
 			$this->user->id);
+
+		$this['filterForm']->setDefaults(array(
+			'query' => $this->query,
+		));
+	}
+
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentFilterForm()
+	{
+		$form = new Form;
+
+		$form->addText('query');
+
+		$form->addSubmit('send', 'Hledat');
+
+		$presenter = $this;
+		$form->onSuccess[] = function (Form $form) use ($presenter) {
+			$presenter->query = $form->getValues()->query;
+			$presenter->redirect('this');
+		};
+		return $form;
 	}
 
 

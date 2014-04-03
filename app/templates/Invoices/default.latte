@@ -4,6 +4,17 @@
 		<a n:href="create" class="btn btn-default">Vytvořit novou fakturu</a>
 	</p>
 
+	<form class="form-inline" role="form" n:name="filterForm">
+		<div class="form-group">
+			<input type="text" class="form-control" name="query"
+				   placeholder="Zadejte hledaný výraz" n:name="query">
+		</div>
+		<div class="form-group">
+			{input state, class => 'form-control'}
+		</div>
+		<button type="submit" class="btn btn-default" n:name="send">Hledat</button>
+	</form>
+
 	<table class="table table-hover">
 		<thead>
 			<tr>
